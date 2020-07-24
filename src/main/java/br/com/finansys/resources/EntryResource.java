@@ -1,6 +1,5 @@
 package br.com.finansys.resources;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import br.com.finansys.dtos.EntryDTO;
 import br.com.finansys.dtos.EntryNewDTO;
@@ -25,6 +22,7 @@ import br.com.finansys.entidades.Entry;
 import br.com.finansys.enus.TypeEnum;
 import br.com.finansys.repositories.CategoriaRepository;
 import br.com.finansys.repositories.EntryRepository;
+import br.com.finansys.resources.exceptions.NegocioException;
 import br.com.finansys.utils.DataUtil;
 
 @Path("/entries")
@@ -74,10 +72,10 @@ public class EntryResource {
 
     @POST
     @Transactional
-    public void create(final EntryNewDTO dto) {
+    public void create(final EntryNewDTO dto) throws NegocioException {
         final Boolean existeByName = entryRepository.existeByName(dto.getName());
         if (existeByName) {
-            throw new RuntimeException("Lançamento já está cadastrado");
+            throw new NegocioException("Lançamento já está cadastrado");
         }
 
         createResourceAndPersist(dto);

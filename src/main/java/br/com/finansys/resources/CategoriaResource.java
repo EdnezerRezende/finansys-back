@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import br.com.finansys.dtos.CategoriaNewDTO;
 import br.com.finansys.entidades.Category;
 import br.com.finansys.repositories.CategoriaRepository;
+import br.com.finansys.resources.exceptions.NegocioException;
 
 @Path("/categories")
 @Produces(MediaType.APPLICATION_JSON)
@@ -40,10 +41,10 @@ public class CategoriaResource {
 
     @POST
     @Transactional
-    public void create(CategoriaNewDTO dto){
+    public void create(CategoriaNewDTO dto) throws NegocioException {
         Boolean existeByName = categoryRepository.existeByName(dto.getName());
         if (existeByName){
-            throw new RuntimeException("Categoria já está cadastrada");
+            throw new NegocioException("Categoria já está cadastrada");
         }
 
         createResourceAndPersist(dto);

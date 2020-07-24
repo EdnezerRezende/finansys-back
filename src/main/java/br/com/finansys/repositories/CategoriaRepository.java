@@ -10,7 +10,7 @@ import io.quarkus.panache.common.Parameters;
 public class CategoriaRepository implements PanacheRepository<Category> {
     
     public Boolean existeByName(final String name) {
-		return find("name = :name ", Parameters.with("name", name)).firstResult() != null;
+		return find("LOWER(name) = :name ", Parameters.with("name", name.toLowerCase())).firstResult() != null;
     };
     
 }

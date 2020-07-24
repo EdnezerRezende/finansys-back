@@ -13,7 +13,7 @@ import io.quarkus.panache.common.Parameters;
 public class EntryRepository implements PanacheRepository<Entry> {
     
     public Boolean existeByName(final String name) {
-		  return find("name = :name ", Parameters.with("name", name)).firstResult() != null;
+		  return find("LOWER(name) = :name ", Parameters.with("name", name.toLowerCase())).firstResult() != null;
     };
 
     public List<Entry> getAllByDateStartAndDateFinish(final LocalDate dateStart, final LocalDate dateFinish){
