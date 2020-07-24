@@ -32,6 +32,10 @@ public class EntryDTO {
 
     private Category category;
 
+    private Long repeticao;
+
+    private Long quantidadeRepeticoes;
+
     public EntryDTO(Entry entry){
         setAmount(entry.getAmount());
         setCategory(entry.getCategory());
@@ -42,5 +46,7 @@ public class EntryDTO {
         setName(entry.getName());
         setPaid(entry.getPaid());
         setType(entry.getType());
+        setRepeticao(entry.getRepeticao());
+        setQuantidadeRepeticoes(entry.getQuantidadeRepeticoes());
     }
 }

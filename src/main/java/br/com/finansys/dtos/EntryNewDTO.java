@@ -26,4 +26,6 @@ public class EntryNewDTO {
     private Boolean paid;
 
     private Long categoryId;
+
+    private Long quantidadeRepeticoes;
 }

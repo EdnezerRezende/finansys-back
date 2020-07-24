@@ -4,10 +4,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class DataUtil {
-    final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public static LocalDate dataStringForLocalDate(final String data) {
+        formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return LocalDate.parse(data, formatter);
+    }
 
+    public static LocalDate dataStringForLocalDate(final String data, final String formato) {
+        formatter = DateTimeFormatter.ofPattern(formato);
         return LocalDate.parse(data, formatter);
     }
 

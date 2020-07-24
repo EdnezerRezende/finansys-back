@@ -1,5 +1,6 @@
 package br.com.finansys.resources;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import br.com.finansys.dtos.EntryDTO;
 import br.com.finansys.dtos.EntryNewDTO;
@@ -46,6 +49,23 @@ public class EntryResource {
     }
 
     @GET
+    @Path("/dateStart/{dateStart}/dateFinish/{dateFinish}")
+    public List<EntryDTO> getAllByDateStartAndFinish(
+        @PathParam(value="dateStart") final String dateStart, 
+        @PathParam(value="dateFinish") final String dateFinish
+    ){
+        List<EntryDTO> dtoRetorno = new ArrayList<>();
+        entryRepository.getAllByDateStartAndDateFinish(
+            DataUtil.dataStringForLocalDate(dateStart, "dd-MM-yyyy"),
+            DataUtil.dataStringForLocalDate(dateFinish, "dd-MM-yyyy")
+        ).forEach(entry -> {
+            EntryDTO dto = new EntryDTO(entry);
+        dtoRetorno.add(dto);
+        });
+        return dtoRetorno;
+    }
+
+    @GET
     @Path("/{id}")
     public EntryDTO getById(@PathParam(value="id") final Long id) {
         EntryDTO dto = new EntryDTO(entryRepository.findById(id));
@@ -65,17 +85,33 @@ public class EntryResource {
 
     private void createResourceAndPersist(final EntryNewDTO dto) {
         Entry entry = new Entry();
+        Long quantidadeRepet = dto.getQuantidadeRepeticoes();
+
         if (dto.getId() != null) {
             entry = entryRepository.findById(dto.getId());
+            gerarEntry(dto, entry, entry.getRepeticao());
+        } else{
+            for(int i = 1; i <= quantidadeRepet; i++){
+                entry = new Entry();
+                gerarEntry(dto, entry, Integer.valueOf(i).longValue());
+            }
         }
+    }
 
+    private void gerarEntry(final EntryNewDTO dto, Entry entry, Long i) {
         entry.setName(dto.getName());
         entry.setDescription(dto.getDescription());
         entry.setAmount(dto.getAmount());
         entry.setCategory(categoryRepository.findById(dto.getCategoryId()));
-        entry.setDate(DataUtil.dataStringForLocalDate(dto.getDate()));
+        if (i == 1){
+            entry.setDate(DataUtil.dataStringForLocalDate(dto.getDate()));
+        } else {
+            entry.setDate(DataUtil.dataStringForLocalDate(dto.getDate()).plusMonths(i-1));
+        }
         entry.setPaid(dto.getPaid());
         entry.setType(dto.getType());
+        entry.setRepeticao(i);
+        entry.setQuantidadeRepeticoes(dto.getQuantidadeRepeticoes());
 
         entryRepository.persist(entry);
     }
@@ -84,6 +120,15 @@ public class EntryResource {
     @Transactional
     public void update(final EntryNewDTO dto) {
         createResourceAndPersist(dto);
+    }
+
+    @PUT
+    @Path("/paid")
+    @Transactional
+    public void paid(final EntryDTO dto) {
+        Entry entry = entryRepository.findById(dto.getId());
+        entry.setPaid(true);
+        entryRepository.persist(entry);
     }
 
     @DELETE
