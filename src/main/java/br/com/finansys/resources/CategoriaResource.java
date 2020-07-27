@@ -29,7 +29,8 @@ public class CategoriaResource {
 
     @GET
     public List<Category> getAll(){
-        return categoryRepository.listAll();
+        
+        return categoryRepository.find("ORDER BY name").list();
     }
 
     @GET
