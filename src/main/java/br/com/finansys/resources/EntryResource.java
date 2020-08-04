@@ -58,7 +58,7 @@ public class EntryResource {
             DataUtil.dataStringForLocalDate(dateFinish, "dd-MM-yyyy")
         ).forEach(entry -> {
             EntryDTO dto = new EntryDTO(entry);
-        dtoRetorno.add(dto);
+            dtoRetorno.add(dto);
         });
         return dtoRetorno;
     }
