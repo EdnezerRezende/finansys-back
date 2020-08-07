@@ -16,11 +16,15 @@ import br.com.finansys.config.TokenUtils;
 import br.com.finansys.entidades.AuthRequest;
 import br.com.finansys.entidades.AuthResponse;
 import br.com.finansys.entidades.User;
+import br.com.finansys.repositories.UserRepository;
 
 public class AuthenticationREST {
     
 	@Inject
 	PBKDF2Encoder passwordEncoder;
+
+	@Inject
+	UserRepository userRepository;
 
 	@ConfigProperty(name = "com.ard333.quarkusjwt.jwt.duration") public Long duration;
 	@ConfigProperty(name = "mp.jwt.verify.issuer") public String issuer;
@@ -28,10 +32,10 @@ public class AuthenticationREST {
 	@PermitAll
 	@POST @Path("/login") @Produces(MediaType.APPLICATION_JSON)
 	public Response login(AuthRequest authRequest) {
-		User u = User.findByUsername(authRequest.username);
-		if (u != null && u.password.equals(passwordEncoder.encode(authRequest.password))) {
+		User u = userRepository.findByName(authRequest.username);
+		if (u != null && u.getPassword().equals(passwordEncoder.encode(authRequest.password))) {
 			try {
-				return Response.ok(new AuthResponse(TokenUtils.generateToken(u.username, u.roles, duration, issuer))).build();
+				return Response.ok(new AuthResponse(TokenUtils.generateToken(u.getUsername(), u.getRoles(), duration, issuer))).build();
 			} catch (Exception e) {
 				return Response.status(Status.UNAUTHORIZED).build();
 			}
