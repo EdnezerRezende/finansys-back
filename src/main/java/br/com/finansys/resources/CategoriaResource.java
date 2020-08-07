@@ -2,6 +2,7 @@ package br.com.finansys.resources;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
@@ -20,6 +21,7 @@ import br.com.finansys.repositories.CategoriaRepository;
 import br.com.finansys.resources.exceptions.NegocioException;
 
 @Path("/categories")
+@RolesAllowed("USER")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class CategoriaResource {
