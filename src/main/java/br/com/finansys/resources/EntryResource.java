@@ -3,6 +3,7 @@ package br.com.finansys.resources;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.Consumes;
@@ -26,6 +27,7 @@ import br.com.finansys.resources.exceptions.NegocioException;
 import br.com.finansys.utils.DataUtil;
 
 @Path("/entries")
+@RolesAllowed("USER")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class EntryResource {
@@ -37,6 +39,7 @@ public class EntryResource {
     public CategoriaRepository categoryRepository;
 
     @GET
+    @RolesAllowed("USER")
     public List<EntryDTO> getAll(){
         List<EntryDTO> dtoRetorno = new ArrayList<>();
         entryRepository.listAll().forEach(entry -> {
@@ -48,6 +51,7 @@ public class EntryResource {
 
     @GET
     @Path("/dateStart/{dateStart}/dateFinish/{dateFinish}")
+    @RolesAllowed("USER")
     public List<EntryDTO> getAllByDateStartAndFinish(
         @PathParam(value="dateStart") final String dateStart, 
         @PathParam(value="dateFinish") final String dateFinish
@@ -65,6 +69,7 @@ public class EntryResource {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed("USER")
     public EntryDTO getById(@PathParam(value="id") final Long id) {
         EntryDTO dto = new EntryDTO(entryRepository.findById(id));
         return dto;
@@ -72,6 +77,7 @@ public class EntryResource {
 
     @POST
     @Transactional
+    @RolesAllowed("USER")
     public void create(final EntryNewDTO dto) throws NegocioException {
         final Boolean existeByName = entryRepository.existeByName(dto.getName());
         if (existeByName) {
@@ -116,6 +122,7 @@ public class EntryResource {
 
     @PUT
     @Transactional
+    @RolesAllowed("USER")
     public void update(final EntryNewDTO dto) {
         createResourceAndPersist(dto);
     }
@@ -123,6 +130,7 @@ public class EntryResource {
     @PUT
     @Path("/paid")
     @Transactional
+    @RolesAllowed("USER")
     public void paid(final EntryDTO dto) {
         Entry entry = entryRepository.findById(dto.getId());
         entry.setPaid(true);
@@ -132,6 +140,7 @@ public class EntryResource {
     @DELETE
     @Path("/{id}")
     @Transactional
+    @RolesAllowed("USER")
     public void delete(@PathParam(value = "id") final Long id) {
         final Entry entry = entryRepository.findById(id);
         entry.delete();
@@ -139,6 +148,7 @@ public class EntryResource {
 
     @GET
     @Path("/typesEnum")
+    @RolesAllowed("USER")
     public List<TypeEnumDTO> getTypes() {
         List<TypeEnumDTO> types = new ArrayList<>();
 
