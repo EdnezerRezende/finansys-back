@@ -20,6 +20,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import br.com.finansys.config.PBKDF2Encoder;
 import br.com.finansys.config.TokenUtils;
+import br.com.finansys.dtos.UsuarioDTO;
 import br.com.finansys.entidades.AuthRequestDTO;
 import br.com.finansys.entidades.AuthResponse;
 import br.com.finansys.entidades.Role;
@@ -46,7 +47,12 @@ public class AuthenticationREST {
 		Usuario u = userRepository.findByName(authRequest.username);
 		if (u != null && u.getPassword().equals(passwordEncoder.encode(authRequest.password))) {
 			try {
-				return Response.ok(new AuthResponse(TokenUtils.generateToken(u.getUsername(), u.getRoles(), duration, issuer))).build();
+				UsuarioDTO user = new UsuarioDTO();
+				user.setId(u.getId());
+				user.setUsername(u.getUsername());
+				user.setRoles(u.getRoles());
+				user.setToken(TokenUtils.generateToken(u.getUsername(), u.getRoles(), duration, issuer));
+				return Response.ok(user).build();
 			} catch (Exception e) {
 				return Response.status(Status.UNAUTHORIZED).build();
 			}

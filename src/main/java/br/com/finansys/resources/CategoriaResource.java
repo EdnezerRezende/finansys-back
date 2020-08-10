@@ -30,6 +30,7 @@ public class CategoriaResource {
     public CategoriaRepository categoryRepository;
 
     @GET
+    @RolesAllowed("USER")
     public List<Category> getAll(){
         
         return categoryRepository.find("ORDER BY name").list();
@@ -37,6 +38,7 @@ public class CategoriaResource {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed("USER")
     public Category getById(@PathParam(value="id") Long id){
         return categoryRepository.findById(id);
     }
@@ -44,6 +46,7 @@ public class CategoriaResource {
 
     @POST
     @Transactional
+    @RolesAllowed("USER")
     public void create(CategoriaNewDTO dto) throws NegocioException {
         Boolean existeByName = categoryRepository.existeByName(dto.getName());
         if (existeByName){
@@ -66,6 +69,7 @@ public class CategoriaResource {
 
     @PUT
     @Transactional
+    @RolesAllowed("USER")
     public void update(CategoriaNewDTO dto){
         createResourceAndPersist(dto);
     }
@@ -73,6 +77,7 @@ public class CategoriaResource {
     @DELETE
     @Path("/{id}")
     @Transactional
+    @RolesAllowed("USER")
     public void delete(@PathParam(value="id") Long id){
         Category categoria = categoryRepository.findById(id);
         categoria.delete();
