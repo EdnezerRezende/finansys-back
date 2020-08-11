@@ -22,7 +22,6 @@ import br.com.finansys.config.PBKDF2Encoder;
 import br.com.finansys.config.TokenUtils;
 import br.com.finansys.dtos.UsuarioDTO;
 import br.com.finansys.entidades.AuthRequestDTO;
-import br.com.finansys.entidades.AuthResponse;
 import br.com.finansys.entidades.Role;
 import br.com.finansys.entidades.Usuario;
 import br.com.finansys.repositories.UsuarioRepository;
