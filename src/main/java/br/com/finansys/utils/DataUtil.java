@@ -1,6 +1,7 @@
 package br.com.finansys.utils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DataUtil {
@@ -19,4 +20,9 @@ public class DataUtil {
     public static String dataLocalDateForString(final LocalDate data) {
         return data.format(formatter).toString();
     }
+    
+    public static String converterStringLocalDate(final String data) {
+    	LocalDateTime date = LocalDateTime.parse(data.toString(), formatter);
+    	return dataLocalDateForString(date.toLocalDate());
+    }    
 }

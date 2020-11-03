@@ -17,7 +17,7 @@ public class EntryRepository implements PanacheRepository<Entry> {
     };
 
     public List<Entry> getAllByDateStartAndDateFinish(final LocalDate dateStart, final LocalDate dateFinish){
-      return find("date between :dateStart and :dateFinish", Parameters.with("dateStart", dateStart).and("dateFinish", dateFinish)).list();
+      return find("date between :dateStart and :dateFinish ORDER BY name", Parameters.with("dateStart", dateStart).and("dateFinish", dateFinish)).list();
     }
     
 }
