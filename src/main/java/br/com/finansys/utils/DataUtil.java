@@ -22,7 +22,9 @@ public class DataUtil {
     }
     
     public static String converterStringLocalDate(final String data) {
-    	LocalDateTime date = LocalDateTime.parse(data.toString(), formatter);
+    	DateTimeFormatter formatterString = 
+    	        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    	LocalDateTime date = LocalDateTime.parse(data.toString(), formatterString);
     	return dataLocalDateForString(date.toLocalDate());
     }    
 }
