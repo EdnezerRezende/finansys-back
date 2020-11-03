@@ -93,6 +93,7 @@ public class EntryResource {
 
         if (dto.getId() != null) {
             entry = entryRepository.findById(dto.getId());
+            dto.setDate(DataUtil.converterStringLocalDate(dto.getDate()));
             gerarEntry(dto, entry, entry.getRepeticao());
         } else{
             for(int i = 1; i <= quantidadeRepet; i++){
