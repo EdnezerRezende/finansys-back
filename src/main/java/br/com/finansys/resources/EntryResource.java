@@ -33,6 +33,11 @@ import br.com.finansys.utils.DataUtil;
 @Consumes(MediaType.APPLICATION_JSON)
 public class EntryResource {
 
+    /**
+     *
+     */
+    private static final long QUANTIDADE_REPETICAO_UPDATE = 1L;
+
     @Inject
     public EntryRepository entryRepository;
 
@@ -102,7 +107,7 @@ public class EntryResource {
                 throw new NegocioException("Não foi possível realizar a conversão de data");
             }
 
-            gerarEntry(dto, entry, entry.getQuantidadeRepeticoes());
+            gerarEntry(dto, entry, QUANTIDADE_REPETICAO_UPDATE);
         } else{
             for(int i = 1; i <= quantidadeRepet; i++){
                 entry = new Entry();
