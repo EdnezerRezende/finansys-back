@@ -102,7 +102,7 @@ public class EntryResource {
                 throw new NegocioException("Não foi possível realizar a conversão de data");
             }
 
-            gerarEntry(dto, entry, entry.getRepeticao());
+            gerarEntry(dto, entry, entry.getQuantidadeRepeticoes());
         } else{
             for(int i = 1; i <= quantidadeRepet; i++){
                 entry = new Entry();
