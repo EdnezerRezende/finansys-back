@@ -1,5 +1,6 @@
 package br.com.finansys.resources;
 
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,13 +88,20 @@ public class EntryResource {
         createResourceAndPersist(dto);
     }
 
-    private void createResourceAndPersist(final EntryNewDTO dto) {
+    private void createResourceAndPersist(final EntryNewDTO dto) throws NegocioException {
         Entry entry = new Entry();
         Long quantidadeRepet = dto.getQuantidadeRepeticoes();
 
         if (dto.getId() != null) {
             entry = entryRepository.findById(dto.getId());
-            dto.setDate(DataUtil.converterStringLocalDate(dto.getDate()));
+            try {
+                dto.setDate(DataUtil.converterStringLocalDate(dto.getDate()));
+            } catch (DateTimeParseException e) {
+                System.out.println("Sem conversão, utilizando formato original");
+            } catch (Exception e){
+                throw new NegocioException("Não foi possível realizar a conversão de data");
+            }
+
             gerarEntry(dto, entry, entry.getRepeticao());
         } else{
             for(int i = 1; i <= quantidadeRepet; i++){
@@ -124,7 +132,7 @@ public class EntryResource {
     @PUT
     @Transactional
     @RolesAllowed("USER")
-    public void update(final EntryNewDTO dto) {
+    public void update(final EntryNewDTO dto) throws NegocioException {
         createResourceAndPersist(dto);
     }
 
