@@ -13,7 +13,11 @@ public class DataUtil {
         try {
             dataConvertida = dataStringForLocalDate(data, "dd/MM/yyyy");
         } catch (DateTimeParseException e) {
-            dataConvertida = dataStringForLocalDate(data, "yyyy-MM-ddHH:mm:ss.SSS'Z'");
+            String[] dataSplit = data.split("-");
+            dataConvertida = LocalDate.now()
+                                .withYear(Integer.parseInt(dataSplit[2]))
+                                .withMonth(Integer.parseInt(dataSplit[1]))
+                                .withDayOfMonth(Integer.parseInt(dataSplit[0]));
         }
 
         return dataConvertida;
