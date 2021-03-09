@@ -85,11 +85,6 @@ public class EntryResource {
     @Transactional
     @RolesAllowed("USER")
     public void create(final EntryNewDTO dto) throws NegocioException {
-        final Boolean existeByName = entryRepository.existeByName(dto.getName());
-        if (existeByName) {
-            throw new NegocioException("Lançamento já está cadastrado");
-        }
-
         createResourceAndPersist(dto);
     }
 
